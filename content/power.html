@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="https://www.w3.org/1999/xhtml/">
+<style>
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.power-content {
+	height: 100%;
+	width: 100%;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.power-table-container, .power-add-power-container {
+	margin-top: 1em;
+	margin-right: 0.5em;
+	margin-left: 0.5em;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	border: 1px solid rgb(240, 240, 240);
+}
+
+.power-select {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: flex-end;
+	justify-content: flex-end;
+	height: 3.5em;
+	background-color: rgb(246, 246, 246);
+}
+
+.input-group {
+	width: 18em;
+	margin-right: 0.5em;
+}
+
+.power-btn {
+	cursor: pointer;
+}
+
+.power-table-content, .power-table {
+	width: 100%;
+}
+
+.table {
+	margin-bottom: 0;
+}
+
+.power-table thead {
+	background-color: rgb(228, 16, 85);
+}
+
+.power-table thead {
+	color: white;
+	font-family: Microsoft JhengHei;
+	font-weight: bolder;
+}
+
+.power-table td {
+	border: 0.2px solid white;
+}
+
+.power-table tbody td {
+	color: rgb(64, 64, 64);
+}
+
+.power-page {
+	background-color: rgb(246, 246, 246);
+	color: rgb(64, 64, 64);
+	font-size: 0.9em;
+}
+
+.prev-next-page {
+	cursor: pointer;
+}
+
+.table thead tr td {
+	vertical-align: middle;
+	text-align: center;
+	padding: 3px;
+}
+.table {
+	table-layout: fixed;
+}
+
+.table thead td, .table tbody td {
+	overflow: hidden;
+}
+.table-content td {
+cursor:pointer;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+@media screen and (max-width: 768px) {
+	.addUser {
+		display:none;
+	}
+}
+</style>
+<body>
+<div>
+	<div class="power-table-container">
+		<div class="power-select">
+			<div class="addUser" style="margin-right:1em">
+				<a data-toggle="modal" data-target="#addUserModal">增加用户</a>
+			</div>
+			<div class="input-group">
+				<input type="text" class="form-control" id="key-word-power"
+					placeholder="用户查询">
+				<div class="input-group-addon power-btn" id="key-word-power-btn">
+					<img src="image/main/query.png" width="18em" />
+				</div>
+			</div>
+		</div>
+		<div class="power-table-content table-responsive"
+			style="margin-bottom: 0;height:327px;overflow-y:auto">
+			<table class="power-table table table-striped table-hover">
+				<thead>
+					<tr>
+						<td style="width: 200px" class="t_email">电子邮件</td>
+						<td style="width: 200px" class="t_nickname">昵称</td>
+						<td style="width: 600px" class="t_power">用户权限</td>
+						<td style="width: 50px" class="t_manage"></td>
+					</tr>
+				</thead>
+				<tbody class="table-content">
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="power-page">
+			<nav class="navbar navbar-default navbar-power-page">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button id="pageBtn" type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#navbar-power-right"
+							aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+					</div>
+					<form class="navbar-form navbar-right">
+						<div class="form-group">
+							<input type="text" class="form-control" id="goto-page"
+								style="width: 7em" placeholder="转到">
+						</div>
+						<button type="button" class="btn btn-default" id="goto-page-btn">go</button>
+					</form>
+					<div class="collapse navbar-collapse" id="navbar-power-right">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+								<a>第<span id="now-page">1</span>页,共<span id="totle-page"></span>页
+								</a>
+							</li>
+							<li><a id="prev-page" class="prev-next-page">上一页</a></li>
+							<li><a id="next-page" class="prev-next-page">下一页</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+	
+	<div class="power-add-power-container" style="height:200px;background-color: rgb(249,249,249);margin-bottom:1em">
+		<div class="add-power-title" style="margin-left:1em;margin-top:1em;font-family:Microsoft JhengHei;font-weight: bolder;font-size: 1.1em">
+			<span>为以下用户添加权限:</span>
+		</div>
+		<div class="input-group" style="margin-left:1em;margin-top:1em;display:flex;width:80%">
+			<input type="text" class="form-control" style="width:25%" id="power-add-input">
+			<div class="btn-group">
+				<button id="choose-power-btn" target="0" type="button" style="margin-left:2.5em" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    	<span id="choose-power-btn-title">权限选择</span> <span class="caret"></span>
+			  	</button>
+			  	<ul class="dropdown-menu">
+			    	<li><a title="阅读权限" target="1" class="choose-power-btn-li">读取权限</a></li>
+			    	<li><a title="修改权限" target="2" class="choose-power-btn-li">修改权限</a></li>
+			    	<li><a title="读取权限" target="4" class="choose-power-btn-li">管理权限</a></li>
+			  </ul>
+			</div>
+		</div>
+		<div class="email-push">
+			<div class="checkbox" style="margin-left:1em;margin-top:1.5em;margin-bottom:1.5em">
+				<label>
+					<input type="checkbox" id="power-add-Email-push"> 是否邮件提醒对方
+				</label>
+			</div>
+		</div>
+		<div class="submit_btn" style="margin-left:1em">
+			<button class="btn btn-default" id="power-add-submit">提交</button>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="changeUserInfoAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+                <h4 class="modal-title" id="changeUserModalTitle">
+                    修改用户信息
+                </h4>
+            </div>
+            <div class="modal-body" id="changeUserModalBody">
+                <form>
+                	<input type="hidden" id="changeUser_id"/>
+				  <div class="form-group">
+				    <label>Email</label>
+				    <input type="email" class="form-control" id="changeUser_email" placeholder="Email">
+				  </div>
+				  <div class="form-group">
+				    <label>Password</label>
+				    <input type="password" class="form-control" id="changeUser_password" placeholder="密码,无需设置请留空">
+				  </div>
+				  <div class="form-group">
+				    <label>Nickname</label>
+				    <input type="text" class="form-control" id="changeUser_nickname" placeholder="昵称">
+				  </div>
+				  <div class="checkbox">
+				    <label>
+				      <input type="checkbox" id="changeUser_Power_canRead"> 读取权限
+				    </label>
+				    <label>
+				      <input type="checkbox" id="changeUser_Power_canWrite"> 修改权限
+				    </label>
+				    <label>
+				      <input type="checkbox" id="changeUser_Power_canManage"> 管理权限
+				    </label>
+				  </div>
+				  <br>
+				  <div class="checkbox">
+				    <label>
+				      <input type="checkbox" id="changeUser_Email_push"> 是否邮件提醒对方
+				    </label>
+				  </div>
+				</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-danger" id="changeUser_submit">
+                    保存修改
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+                <h4 class="modal-title" id="addUserTitle">
+                    增加用户
+                </h4>
+            </div>
+            <div class="modal-body" id="addUserBody">
+                <form>
+				  <div class="form-group">
+				    <label>Email</label>
+				    <input type="email" class="form-control" id="addUser_email" placeholder="请输入Email">
+				  </div>
+				  <div class="form-group">
+				    <label>Password</label>
+				    <input type="password" class="form-control" id="addUser_password" placeholder="请输入密码">
+				  </div>
+				  <div class="form-group">
+				    <label>Nickname</label>
+				    <input type="text" class="form-control" id="addUser_nickname" placeholder="请输入昵称">
+				  </div>
+				  <div class="checkbox">
+				    <label>
+				      <input type="checkbox" id="addUser_Power_canRead"> 读取权限
+				    </label>
+				    <label>
+				      <input type="checkbox" id="addUser_Power_canWrite"> 修改权限
+				    </label>
+				    <label>
+				      <input type="checkbox" id="addUser_Power_canManage"> 管理权限
+				    </label>
+				  </div>
+				</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-danger" id="addUser_submit">
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+//定义
+	var token = localStorage["token"];
+	var nowPageJSON = null;
+	var pageSize = 8;
+	var totalPage = 0;
+	var nowPage = 1;
+	var condition = null;
+
+	var deleteBtnAction = function() {
+		$(".delete_btn").on("click", function() {
+			var deleteId = $(this).attr("target");
+			$.ajax({
+				url: URL+"user/deleteUser",
+				data: {
+					id: deleteId
+				},
+				headers: {
+					token: token
+				},
+				type:"get",
+				dataType:"json",
+				success: function(data) {
+					if(data.code == 1) {
+						getUserList(nowPage,pageSize,condition);
+					} else {
+						alert(data.message);
+					}
+				},
+				error: function() {
+					alert("网络异常。");
+				}
+			})
+		})
+	}
+	
+	var trDoubleClickAction = function() {
+		$("tbody tr").on("dblclick", function() {
+			var num = $(this).attr("num");
+			var json = nowPageJSON[num];
+			$("#changeUser_id").val(json.id);
+			$("#changeUser_email").val(json.email);
+			$("#changeUser_nickname").val(json.nickname);
+			var power = json.power;
+			$("#changeUser_Power_canManage").prop("checked", (power & 4) == 4);
+			$("#changeUser_Power_canWrite").prop("checked", (power & 2) == 2);
+			$("#changeUser_Power_canRead").prop("checked", (power & 1) == 1);
+			$("#changeUserInfoAdmin").modal('show');
+		});
+	}
+	
+	var getUserList = function(page,pageSize,condition) {
+		$.ajax({
+			url: URL+"user/getUserList",
+			headers: {
+				token: token
+			},
+			data:{
+				page: page,
+				pageSize: pageSize,
+				condition: condition
+			},
+			type:"get",
+			dataType:"json",
+			success: function(data) {
+				if(data.code == 1) {
+					getTotalUserNum(pageSize,condition);
+					$("tbody").empty();
+					var jsonArray = data.result;
+					nowPageJSON = jsonArray;
+					for(var i=0;i<data.num;i++) {
+						var json = jsonArray[i];
+						var power = json.power;
+						var powerStr = getPowerString(power);
+						$("tbody").append(
+                        		"<tr id="+json.id+" num="+i+">"+
+                        			"<td title='"+json.email+"' class='t_email'>"+json.email+"</td>"+
+                        			"<td title='"+json.nickname+"' class='t_nickname'>"+json.nickname+"</td>"+
+                        			"<td title='"+powerStr+"' class='t_power'>"+ powerStr +"</td>"+
+                        			"<td><a target="+json.id+" class='delete_btn'>删除</a></td>"+
+                        		"</tr>");
+					}
+					deleteBtnAction();
+					trDoubleClickAction();
+				} else {
+					if(data.message == "缺少token" || data.message == "token过期") {
+						alert("登录失效，请重新登录");
+						localStorge.clear();
+						location.href = "index.html";
+					} else {
+						alert(data.message);
+					}
+				}
+			},
+			error: function() {
+				alert("网络异常");
+			} 
+		})
+	}
+
+	var getTotalUserNum = function(pageSize,condition) {
+		$.ajax({
+			url: URL+"user/getTotalNum",
+			dataType:'json',
+			type:'get',
+			data: {
+				condition:condition
+			},
+			headers: {
+				token: token
+			},
+			success: function(data) {
+				if(data.code == 1) {
+					if(data.num % pageSize == 0) {
+						totalPage = parseInt(data.num / pageSize)
+					} else {
+						totalPage = parseInt(data.num / pageSize) + 1;
+					}
+					$("#totle-page").html(totalPage);
+					$("#now-page").html(nowPage);
+				}
+			},
+			error: function() {
+				alert("网络异常");
+			}
+		})
+	}
+	
+	function getPowerString(power) {
+		var powerStr = "";
+		if((power & 4) == 4) {
+			powerStr += "管理权限&nbsp;&nbsp;&nbsp;&nbsp;";
+		}
+		if((power & 2) == 2) {
+			powerStr += "修改权限&nbsp;&nbsp;&nbsp;&nbsp;";
+		}
+		if((power & 1) == 1) {
+			powerStr += "读取权限&nbsp;&nbsp;&nbsp;&nbsp;";
+		}
+		return powerStr;
+	}
+	
+</script>
+<script>
+	//事件
+	$("#prev-page").on("click", function() {
+		if(nowPage > 1) {
+			nowPage--;
+			getUserList(nowPage, pageSize);
+		}
+	})
+	$("#next-page").on("click", function() {
+		if(nowPage < totalPage) {
+			nowPage++;
+			getUserList(nowPage, pageSize);
+		}
+	})
+	$("#key-word-power-btn").on("click", function() {
+		condition = $("#key-word-power").val();
+		if(condition == "") {
+			condition = null;
+		}
+		nowPage = 1;
+		getUserList(nowPage, pageSize, condition);
+	})
+	$("#goto-page-btn").on("click", function() {
+		var gotoPage = 0;
+	    gotoPage = parseInt($("#goto-page").val());
+	    if(isNaN(gotoPage)) {
+	        alert("数值类型错误");
+	    } else {
+	        if(gotoPage <= totalPage && gotoPage > 0) {
+	        	nowPage = gotoPage;
+	        	getUserList(nowPage, pageSize, condition);    
+	        }
+	    }
+	})
+	$("input[type=checkbox]").on("click", function() {
+		if($(this).attr("checked")) {
+			$(this).attr("checked", false);
+		} else {
+			$(this).attr("checked", true);
+		}
+	})
+	$("#changeUser_submit").on("click", function() {
+	    var id = $("#changeUser_id").val();
+	    var email = $("#changeUser_email").val();
+	    var password = $("#changeUser_password").val();
+	    var nickname = $("#changeUser_nickname").val();
+	    var power = 0;
+	    if ($("#changeUser_Power_canManage").prop("checked")) {
+	        power = power | 4;
+	    }
+	    if ($("#changeUser_Power_canWrite").prop("checked")) {
+	        power = power | 2;
+	    }
+	    if ($("#changeUser_Power_canRead").prop("checked")) {
+	        power = power | 1;
+	    }
+	    $.ajax({
+	        url: URL+"user/changeInfoAdmin",
+	        headers: {
+	            token: token
+	        },
+	        type: "post",
+	        data: {
+	            id: id,
+	            email: email,
+	            password: password,
+	            nickname: nickname,
+	            power: power
+	        },
+	        dataType: "json",
+	        success: function(data) {
+	            alert(data.message);
+	            getUserList(nowPage, pageSize, condition);
+	            $("#changeUserInfoAdmin").modal("hide");
+	        },
+	        error: function() {
+	            alert("网络异常")
+	        }
+	    })
+	})
+	$("#addUser_submit").on("click", function() {
+	    var email = $("#addUser_email").val();
+	    var password = $("#addUser_password").val();
+	    var nickname = $("#addUser_nickname").val();
+	    if(email == "" || password == "" || nickname == "") {
+	    	alert("请输入信息");
+	    	return;
+	    }
+	    var power = 0;
+	    if ($("#addUser_Power_canManage").prop("checked")) {
+	        power = power | 4;
+	    }
+	    if ($("#addUser_Power_canWrite").prop("checked")) {
+	        power = power | 2;
+	    }
+	    if ($("#addUser_Power_canRead").prop("checked")) {
+	        power = power | 1;
+	    }
+	    $.ajax({
+	        url: URL+"user/addUser",
+	        headers: {
+	            token: token
+	        },
+	        type: "post",
+	        data: {
+	            email: email,
+	            password: password,
+	            nickname: nickname,
+	            power: power
+	        },
+	        dataType: "json",
+	        success: function(data) {
+	            alert(data.message);
+	            getUserList(nowPage, pageSize, condition);
+	            $("#addUserModal").modal("hide");
+	        },
+	        error: function() {
+	            alert("网络异常")
+	        }
+	    })
+	})
+	$(".choose-power-btn-li").on("click", function() {
+		var power = $(this).html();
+		var target = $(this).attr("target")
+		$("#choose-power-btn-title").html(power)
+		$("#choose-power-btn").attr("target", target)
+	})
+	$("#power-add-submit").on("click", function() {
+		var email = $("#power-add-input").val();
+		var power = $("#choose-power-btn").attr("target");
+		if(power == 0) {
+			alert("未选择权限");
+			return;
+		}
+		$.ajax({
+			url: URL+"user/changeUserPower",
+			headers: {
+				token: token
+			},
+			data: {
+				email: email,
+				power: power
+			},
+			type: "post",
+			dataType: "json",
+			success: function(data) {
+				alert(data.message)
+				if(data.code == 1) {
+					getUserList(nowPage, pageSize, condition);
+				}
+			},
+			error: function() {
+				alert("网络异常");
+			}
+		})
+	})
+</script>
+<script>
+	getUserList(nowPage, pageSize, condition);
+</script>
+</html>

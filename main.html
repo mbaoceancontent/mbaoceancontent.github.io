@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="https://www.w3.org/1999/xhtml/">
+    
+    <head>
+        <meta charset="utf-8" />
+        <link rel="apple-touch-icon" href="logo.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>MBA Ocean Content</title>
+        <script src="js/core.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <link rel="shortcut icon" type="image/x-icon" href="image/favicon.ico" />
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="css/core/header.css" rel="stylesheet" type="text/css">
+        <link href="css/core/nav.css" rel="stylesheet" type="text/css">
+        <link href="css/core/footer.css" rel="stylesheet" type="text/css">
+		<style>
+			a {
+				cursor: pointer;
+			}
+		</style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="main.html">
+                            <img alt="Ocean Content" src="image/main/logo.png" style="height:100%" /></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-right">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle userAccount-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="userAccount nickname"></span>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#" class="username"></a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="user/changeInfo.html">查看资料</a></li>
+                                    <li>
+                                        <a href="user/changePassword.html">修改密码</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a id="logout-btn">退出</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="user/setting.html">设置</a></li>
+                            <li>
+                                <a href="user/remind.html">提醒</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="content">
+            <nav class="nav-side navbar navbar-default" style="border-radius:0">
+                <div class="container-fluid nav-side-list">
+                    <section class="text-right back">
+                        <img src="image/main/left.png" id="hide" class="hide_show _hide" /></section>
+                    <div class="list">
+                        <a href="#query" id="query">
+                            <section class="li" target="query">
+                                <span class="checked" style="display:none"></span>
+                                <span class="message">
+                                    <span class="icon">
+                                        <img src="image/main/query.png" /></span>信息查询</span>
+                            </section>
+                        </a>
+                        <a href="#change" id="change">
+                            <section class="li" target="change">
+                                <span class="checked" style="display:none"></span>
+                                <span class="message">
+                                    <span class="icon">
+                                        <img src="image/main/change.png" /></span>数据修改</span>
+                            </section>
+                        </a>
+                        <a href="#upload" id="upload">
+                            <section class="li" target="upload">
+                                <span class="checked" style="display:none"></span>
+                                <span class="message">
+                                    <span class="icon">
+                                        <img src="image/main/upload.png" /></span>文件上传</span>
+                            </section>
+                        </a>
+                        <a href="#backup" id="backup">
+                            <section class="li" target="backup">
+                                <span class="checked" style="display:none"></span>
+                                <span class="message">
+                                    <span class="icon">
+                                        <img src="image/main/backup.png" /></span>备份中心</span>
+                            </section>
+                        </a>
+                        <a href="#power" id="power">
+                            <section class="li" target="power">
+                                <span class="checked" style="display:none"></span>
+                                <span class="message">
+                                    <span class="icon">
+                                        <img src="image/main/power.png" /></span>权限管理</span>
+                            </section>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <div class="main" style="overflow:auto">
+            	
+            </div>
+        </div>
+        <footer>
+            <span class="footer-title">© 2016 MEDIACOM BEYOND ADVERTISING. All Rights Reserved.
+                <span class="main-color">MEDIACOM</span></span>
+        </footer>
+    </body>
+
+
+    <script>
+        var nickname = localStorage["nickname"];
+        var email = localStorage["email"];
+        $(".nickname").html(nickname);
+        $(".username").html(email);
+        //test over
+    </script>
+    <script>
+    	//side-nav缩放
+    	var navWidth = 0;
+    	var windowWidth = $(window).width();
+        $(".li").on("click", function() {
+            $(".li").children(".checked").css("display", "none");
+            $(this).children(".checked").css("display", "");
+            var target = $(this).attr("target");
+            $(".main").empty();
+            $(".main").load("content/"+target+".html");
+        }) 
+        $("#hide").on("click", function() {
+            if ($(".nav-side").width() > 16) {
+                hideNav();
+            } else {
+                showNav();
+            }
+        }) 
+        var hideNav = function() {
+            navWidth = $(".nav-side").width();
+	        $("#hide").attr("src", "image/main/right.png");
+            $(".list").fadeOut(0, function() {
+                $(".nav-side").animate({
+                    width: "16px"
+                },function() {
+	                if(windowWidth < 767) {
+                        formatMainWidth();
+	        			$(".main").fadeIn(150);
+	        		}
+                });
+            });
+        }
+        var showNav = function() {
+        	$("#hide").attr("src", "image/main/left.png");
+        	if(windowWidth < 767) {
+        		$(".main").fadeOut(50);
+                formatMainWidth();
+        	}
+            $(".nav-side").animate({
+                width: "270px"
+            }, function() {
+                $(".list").fadeIn(100);
+                $(".nav-side").css("height","");
+            });
+        }
+        var formatMainWidth = function() {
+            var mainWidth = $(window).width() - $(".nav-side").width();
+            $(".main").css("width", mainWidth+"px");
+        }
+    </script>
+
+    <script>
+        //首次打开
+        var url = window.location.toString();
+        var id = url.split("#")[1];
+        formatMainWidth();
+        if(id == null || id == "") {
+        	$("#query .li").children(".checked").css("display","");
+        	$(".main").load("content/query.html");
+        } else {
+        	$(".li").children(".checked").css("display", "none");
+            $("#" + id + " .li").children(".checked").css("display", "");
+        	$(".main").load("content/"+id+".html");
+        }
+        if(windowWidth < 767) {
+        	$(".main").hide();
+        }
+    </script>
+
+	<script>
+		//按钮事件
+		$("#logout-btn").on("click", function() {
+			localStorage.clear();
+			location.href="index.html";
+		})
+		
+	</script>
+
+
+
+</html>

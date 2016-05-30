@@ -1,0 +1,149 @@
+		* {
+			-webkit-box-sizing: border-box;
+			   -moz-box-sizing: border-box;
+			   	    box-sizing: border-box;
+		}
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.cover {
+			height: 100%;
+			background-size:cover;
+		}
+		.container {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			display: -webkit-flex;
+			display: 		 flex;
+			-webkit-justify-content: center;
+					justify-content: center;
+			-webkit-align-items: center;
+					align-items: center;
+		}
+		.row {
+			display: -webkit-flex;
+			display:		 flex;
+		}
+		.grid1of2 {
+			-webkit-flex: 0 0 50%;
+					flex: 0 0 50%;
+		}
+		.grid-left {
+			background-color: rgb(36,40,42);
+		}
+		.grid-right {
+			background-color: white;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+		}
+		form {
+			width:80%;
+			margin:0;
+		}
+		#username,#password {
+			height:3em;
+			font-size: 1em;
+		}
+		.title,.subtitle {
+			-webkit-flex: 1 0 100%;
+					flex: 1 0 100%;
+			position: relative;
+		}
+		.title span {
+			position: absolute;
+			left:7%;
+			bottom:15%;
+			font-size: 2.2em;
+			font-weight: bolder;
+			font-family:  Microsoft JhengHei;
+		}
+		.subtitle img {
+			position: absolute;
+			top:25%;
+			margin-left:7%;
+		}
+		.sorry {
+			display:none;
+		}
+		@media screen and (max-width: 699px) {
+			.row {
+				width: 100%;
+				height: 90%;
+				-webkit-flex-direction: column;
+						flex-direction: column;
+				-webkit-flex: 0 0 auto;
+						flex: 0 0 auto;
+				-webkit-justify-content: center;
+						justify-content: center;
+				-webkit-align-items: center;
+						align-items: center;
+			}
+			.grid {
+				width: 90%;
+			}
+			.title,.subtitle {
+				height:25%;
+			}
+
+		}
+		@media screen and (min-width: 700px) {
+			.row {
+				height: 325px;
+				-webkit-flex: 0 0 700px;
+						flex: 0 0 700px;
+			}
+			.title,.subtitle {
+				height:50%;
+			}
+		}
+		@media screen and (min-width: 1921px) {
+			.row {
+				height: 40%;
+				-webkit-flex: 0 0 50%;
+						flex: 0 0 50%;
+			}
+			.title span {
+				font-size: 5em;
+			}
+			footer {
+				font-size: 2em;
+			}
+		}
+		@media screen and (max-width: 620px) {
+			footer {
+				display: none;
+			}
+		}
+		@media screen and (max-height: 599) {
+			footer {
+				display: none;
+			}
+		}
+		@media screen and (max-height: 300) {
+			.container {
+				display:none;
+			}
+			.sorry {
+				display:block;
+				position: absolute;
+				top: 45%;
+				left: 10%;
+				color:white;
+				font-size: 3em;
+			}
+		}
+		footer {
+			width: 100%;
+			position: absolute;
+			bottom: 10px;
+			text-align: center;
+			color: white;
+		}
+		.main-color {
+			color: rgb(255,0,90);
+		}

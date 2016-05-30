@@ -1,0 +1,12 @@
+    		.navbar-default {
+    			background-color: rgb(243,243,243);
+    		}
+    		.navbar-brand {
+    			padding: 13px;
+    		}
+    		.container-fluid{
+    			width:100%;
+    		}
+    		.navbar-default .navbar-nav > li > a {
+    			color: rgb(89, 89, 89);
+    		}

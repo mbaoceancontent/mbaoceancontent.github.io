@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="https://www.w3.org/1999/xhtml/">
+
+    <style>
+    * {
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+    }
+    .navbar-query {
+        background-color: rgb(246,246,246);
+        border: 1px solid rgb(240,240,240);
+    }
+    .query-content {
+        height: 100%;
+        width: 100%;
+        display: -webkit-flex;
+        display:         flex; 
+        -webkit-flex-direction: column;
+                flex-direction: column;
+    }
+    .query-title {
+        font-family: Microsoft JhengHei;
+        color: rgb(64,64,64);
+        font-weight: bolder;
+        margin-top: 1.5em;
+        margin-left: 2.1em;
+        margin-bottom: 1.5em;
+    }
+    #last-update-span {
+        font-family: Microsoft JhengHei;
+        margin-left: 2.2em;
+        color: rgb(127,127,127);
+    }
+    .query-table-container {
+        margin-top: 1em;
+        margin-right: 0.5em;
+        margin-left: 0.5em;
+        display: -webkit-flex;
+        display:         flex;
+        -webkit-flex-direction: column;
+                flex-direction: column;
+        border: 1px solid rgb(240,240,240);
+    }
+    .query-select {
+        display: -webkit-flex;
+        display:         flex;
+        -webkit-align-items: center;
+                align-items: center;
+        -webkit-justify-content: flex-end;
+                justify-content: flex-end;
+        height: 3.5em;
+        background-color: rgb(246,246,246);
+    }
+    .input-group {
+        width: 18em;
+        margin-right: 0.5em;
+    }
+    .query-btn {
+        cursor: pointer;
+    }
+    .query-table-content, .query-table {
+        width: 100%;
+    }
+    .table {
+        margin-bottom: 0;
+    }
+    .query-table thead {
+        background-color: rgb(228,16,85);
+    }
+    .query-table thead {
+        color: white;
+        font-family: Microsoft JhengHei;
+        font-weight: bolder;
+    }
+    .query-table td {
+        border: 0.2px solid white;
+    }
+    .query-table tbody td {
+        color: rgb(64,64,64);
+    }
+    .query-page {
+        background-color: rgb(246,246,246);
+        color: rgb(64,64,64);
+        font-size: 0.9em;
+    }
+    .prev-next-page {
+        cursor: pointer;
+    }
+    .table thead tr td {
+        vertical-align: middle;
+        text-align: center;
+        padding: 3px;
+    }
+    .table {
+        table-layout: fixed
+    }
+    .table thead td, .table tbody td {
+        overflow: hidden;
+    }
+    .table-content td {
+         white-space:nowrap;
+         text-overflow:ellipsis;
+    }
+    </style>
+    <body id="query-body">
+
+    <div class="query-content">
+        
+        <div class="query-title">
+            <h3><strong>信息查询</strong></h3>
+        </div>
+        <div class="query-subtitle">
+            <nav class="navbar navbar-default navbar-query">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-left" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-left">
+                        <ul class="nav navbar-nav navbar-left">
+                        	<li>
+                            	<a data-toggle="modal" data-target="#querySetting" >显示项目</a>
+                            </li>
+                            <li>
+                                <a>电子邮件</a>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle userAccount-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span>导出</span>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="export" id="export-to-excel" style="cursor:pointer" data-toggle="modal" data-target="#exportExcel">导出到Excel</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a>最后一次更新&nbsp;:&nbsp;<span id="query-subtitle-lastupdate-username"></span>&nbsp;&nbsp;<span id="query-subtitle-lastupdate-time"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="query-table-container">
+            <div class="query-select">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="key-word-query" placeholder="关键词查询">
+                    <div class="input-group-addon query-btn" id="key-word-query-btn"><img src="image/main/query.png" width="18em"/></div>
+                </div>
+            </div>
+            <div class="query-table-content table-responsive" style="margin-bottom:0;height:421px;overflow:auto">
+                <table class="query-table table table-striped table-hover">
+                    <thead>
+                        <tr>
+                        	<td rowspan="2" style="width:60px" class="t_quarter">季度</td>
+                            <td rowspan="2" style="width:60px" class="t_species">种类</td>
+                            <td rowspan="2" style="width:100px" class="t_title">片名</td>
+                            <td rowspan="2" style="width:60px;display:none" class="t_broadcastTV">电视端</td>
+                            <td rowspan="2" style="width:60px" class="t_broadcastNet">网络端</td>
+                            <td rowspan="2" style="width:60px" class="t_seed">植入情况</td>
+                            <td rowspan="2" style="width:50px" class="t_type">剧情</td>
+                            <td rowspan="2" style="width:60px;display:none" class="t_shootTime">拍摄日期</td>
+                            <td rowspan="2" style="width:90px" class="t_premiereDate">播出日期</td>
+                            <td rowspan="2" style="width:50px" class="t_week">Week</td>
+                            <td rowspan="2" style="width:50px" class="t_time">Time</td>
+                            <td rowspan="2" style="width:60px;display:none" class="t_term">期数</td>
+                            <td rowspan="2" style="width:90px" class="t_offer">公开报价</td>
+                            <td colspan="4" rowspan="1" style="font-size:12px;width:220px" class="t_sellStatus">售卖情况</td>
+                            <td rowspan="2" style="width:60px;display:none" class="t_team">制作团队</td>
+                            <td rowspan="2" style="width:60px;display:none" class="t_actors">主要演员</td>
+                            <td rowspan="2" style="width:60px;display:none" class="t_other">其他</td>
+                        </tr>
+                        <tr style="font-size:12px" class="t_sellStatus">
+                            <td>冠名</td>
+                            <td>特约</td>
+                            <td>指定产品</td>
+                            <td>其他</td>
+                        </tr>
+                    </thead>
+                    <tbody class="table-content">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="query-page">
+                <nav class="navbar navbar-default navbar-query-page">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button id="pageBtn" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-query-right" aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <form class="navbar-form navbar-right">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="goto-page" style="width:7em" placeholder="转到">
+                            </div>
+                            <button type="button" class="btn btn-default" id="goto-page-btn">go</button>
+                        </form>
+                        <div class="collapse navbar-collapse" id="navbar-query-right">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a>第<span id="now-page">1</span>页,共<span id="totle-page"></span>页</a>
+                                </li>
+                                <li>
+                                    <a id="prev-page" class="prev-next-page">上一页</a>
+                                </li>
+                                <li>
+                                    <a id="next-page" class="prev-next-page">下一页</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+        </div>
+    </div> 
+
+    <div class="modal fade" id="exportExcel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="export-modal-title">导出</h4>
+                </div>
+                <div class="modal-body" id="export-modal-content">
+                    正在生成中……
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="querySetting" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  	<div class="modal-dialog" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        			<h4 class="modal-title" id="myModalLabel">设置显示列</h4>
+	      			</div>
+	      		<div class="modal-body">
+	       			 <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_quarter"> 季度
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_species"> 种类
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_title"> 片名
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_broadcastNet"> 网络端
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_broadcastTV"> 电视端
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_type"> 剧情
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_seed"> 植入情况
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_shootTime"> 拍摄时间
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_premiereDate"> 播出日期
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_week"> Week
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_time"> Time
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_term"> 期数
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_offer"> 公开报价
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_sellStatus"> 售卖情况
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_team"> 制作团队
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_actors"> 主要演员
+					    </label>
+					  </div>
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" id="c_other"> 其他
+					    </label>
+					  </div>
+	      		</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	        		<button type="button" class="btn btn-primary" id="save-setting-query">保存</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+    <script src="./js/core/query.js"></script>
+    <script>
+    //初次打开
+    loadShowColumn();
+    checkShowColumn();
+    refreshData(1,pageSize, condition);
+	</script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
